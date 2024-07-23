@@ -1,4 +1,4 @@
-from racs_exceptions import NoUpdatesMadeException, FailedDeletePostException
+from racs.racs_exceptions import NoUpdatesMadeException, FailedDeletePostException
 import warnings
 import requests
 import json
