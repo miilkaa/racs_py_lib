@@ -62,7 +62,7 @@ class Racs:
     def read_post_by_filter(
             self,
             filter_data: dict | None = None,
-            sort: int | None = -1,
+            sort: dict | None = {"_created": -1},
             limit: int | None = 1
     ):
 
@@ -75,8 +75,9 @@ class Racs:
             "sort": sort,
             "limit": limit
         })
-
-        return requests.post(url=url, headers=self.headers, data=payload).json()
+        print(payload)
+        res = requests.post(url=url, headers=self.headers, data=payload).json()
+        return res
 
     def read_file_by_id(
             self,
