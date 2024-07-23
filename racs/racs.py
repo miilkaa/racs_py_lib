@@ -61,13 +61,13 @@ class Racs:
 
     def read_post_by_filter(
             self,
-            filter_data: dict | None = None,
+            filter_data: dict | None = {},
             sort: dict | None = {"_created": -1},
             limit: int | None = 1
     ):
 
-        if not filter_data:
-            raise ValueError('Argument "filter_data" is required')
+        # if not filter_data:
+        #     raise ValueError('Argument "filter_data" is required')
 
         url: str = f"{self.base_url}/get?resource={self.resource}&dataset={self.dataset}"
         payload = json.dumps({
