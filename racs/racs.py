@@ -55,7 +55,7 @@ class Racs:
         if not post_id:
             raise ValueError('Argument "post_id" is required')
 
-        url: str = f"{self.base_url}/{post_id}"
+        url: str = f"{self.base_url}/{post_id}?resource={self.resource}&dataset={self.dataset}"
 
         return requests.get(url=url, headers=self.headers).json()
 
@@ -85,7 +85,7 @@ class Racs:
         if not post_id:
             raise ValueError('Argument "post_id" is required')
 
-        url: str = f"{self.base_url}/file/{post_id}"
+        url: str = f"{self.base_url}/file/{post_id}?resource={self.resource}&dataset={self.dataset}"
 
         headers = {"Accept": "application/octet-stream"}
 
@@ -101,7 +101,7 @@ class Racs:
         if not update_options:
             raise ValueError('Argument "update_options" is required')
 
-        url: str = f'{self.base_url}/{post_id}'
+        url: str = f'{self.base_url}/{post_id}?resource={self.resource}&dataset={self.dataset}'
         payload = json.dumps({
             "update": {
                 "$set": update_options
