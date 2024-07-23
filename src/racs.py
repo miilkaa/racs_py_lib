@@ -1,4 +1,4 @@
-from racs_exceptions import NoUpdatesMadeException
+from racs_exceptions import NoUpdatesMadeException, FailedDeletePostException
 import warnings
 import requests
 import json
@@ -141,5 +141,38 @@ class Racs:
         elif res["matchedCount"] > res["modifiedCount"]:
             warnings.warn(f"Warning: matchedCount ({res['matchedCount']})"
                           f" is greater than modifiedCount ({res['modifiedCount']}).")
+
+        return res
+
+    def delete_post_by_id(
+            self,
+            post_id: str | None = None
+    ):
+        if not post_id:
+            raise ValueError('Argument "post_id" is required')
+
+        url = f"{self.base_url}/{post_id}?resource={self.resource}&dataset={self.dataset}"
+        res = requests.delete(url, headers=self.headers).json()
+        if res["deletedCount"] == 0:
+            raise FailedDeletePostException(res)
+
+        return res
+
+    def delete_post_by_filter(
+            self,
+            filter_data: dict | None = None
+    ):
+        if not filter_data:
+            raise ValueError('Argument "filter_data" is required')
+
+        url = f"{self.base_url}?resource={self.resource}&dataset={self.dataset}"
+        payload = json.dumps({
+            "filter": filter_data
+        })
+
+        res = requests.delete(url, headers=self.headers, data=payload).json()
+
+        if res["deletedCount"] == 0:
+            raise FailedDeletePostException(res)
 
         return res
