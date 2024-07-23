@@ -76,7 +76,7 @@ class Racs:
             "limit": limit
         })
 
-        return requests.post(url=url, headers=self.headers, data=payload)
+        return requests.post(url=url, headers=self.headers, data=payload).json()
 
     def read_file_by_id(
             self,
