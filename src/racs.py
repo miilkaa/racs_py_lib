@@ -1,3 +1,5 @@
+from racs_exceptions import NoUpdatesMadeException
+import warnings
 import requests
 import json
 
@@ -65,7 +67,7 @@ class Racs:
     ):
 
         if not filter_data:
-            raise ValueError('Argument "data" is required')
+            raise ValueError('Argument "filter_data" is required')
 
         url: str = f"{self.base_url}/get?resource={self.resource}&dataset={self.dataset}"
         payload = json.dumps({
@@ -88,3 +90,56 @@ class Racs:
         headers = {"Accept": "application/octet-stream"}
 
         return requests.get(url, headers).json()
+
+    def update_post_by_id(
+            self,
+            post_id: str | None = None,
+            update_options: dict | None = None
+    ):
+        if not post_id:
+            raise ValueError('Argument "post_id" is required')
+        if not update_options:
+            raise ValueError('Argument "update_options" is required')
+
+        url: str = f'{self.base_url}/{post_id}'
+        payload = json.dumps({
+            "update": {
+                "$set": update_options
+            }
+        })
+
+        res = requests.patch(url, headers=self.headers, data=payload).json()
+        if res["matchedCount"] == 0 and res["modifiedCount"] == 0:
+            raise NoUpdatesMadeException(res)
+        elif res["matchedCount"] > res["modifiedCount"]:
+            warnings.warn(f"Warning: matchedCount ({res['matchedCount']})"
+                          f" is greater than modifiedCount ({res['modifiedCount']}).")
+
+        return res
+
+    def update_post_by_filter(
+            self,
+            filter_data: dict | None = None,
+            update_options: dict | None = None
+    ):
+        if not filter_data:
+            raise ValueError('Argument "filter_data" is required')
+        if not update_options:
+            raise ValueError('Argument "update_options" is required')
+
+        url: str = f"{self.base_url}?resource={self.resource}&dataset={self.dataset}"
+        payload = json.dumps({
+            "filter": filter_data,
+            "update": {
+                "$set": update_options
+            }
+        })
+
+        res = requests.patch(url, headers=self.headers, data=payload).json()
+        if res["matchedCount"] == 0 and res["modifiedCount"] == 0:
+            raise NoUpdatesMadeException(res)
+        elif res["matchedCount"] > res["modifiedCount"]:
+            warnings.warn(f"Warning: matchedCount ({res['matchedCount']})"
+                          f" is greater than modifiedCount ({res['modifiedCount']}).")
+
+        return res

@@ -1,2 +1,2 @@
-# racs_py_lib
-Python library for RACS service
+# RACS Python Library
+Python library for [RACS](https://racs.rest/docs/api/) service
