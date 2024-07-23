@@ -1,8 +1,8 @@
 import pytest
 import requests
 import requests_mock
-from src.racs_exceptions import NoUpdatesMadeException
-from src.racs import Racs
+from racs.racs_exceptions import NoUpdatesMadeException
+from racs.racs import Racs
 import warnings
 
 
