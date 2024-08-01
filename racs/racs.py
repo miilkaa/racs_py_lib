@@ -61,8 +61,8 @@ class Racs:
 
     def read_post_by_filter(
             self,
-            filter_data: dict | None = {},
-            sort: dict | None = {"_created": -1},
+            filter_data: dict | list | None = {},
+            sort: dict | list | None = {"_created": -1},
             limit: int | None = 1
     ):
 
@@ -95,7 +95,7 @@ class Racs:
     def update_post_by_id(
             self,
             post_id: str | None = None,
-            update_options: dict | None = None
+            update_options: dict | list | None = None
     ):
         if not post_id:
             raise ValueError('Argument "post_id" is required')
